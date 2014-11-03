@@ -210,15 +210,12 @@ void mousePressed(){
   }
   if(slot[col][row] == SLOT_OFF){
       showSlot(col,row, SLOT_SAFE);
+      slot[col][row] = SLOT_SAFE;
       clickCount++;    
      // println(clickCount);
   }
 
-  /*for(int Count=0;Count<=(totalSlots-bombCount);Count++){
-    if(Count == (totalSlots-bombCount) && 
-       clickCount == (totalSlots-bombCount))
-     {gameState =  GAME_WIN;}
-    }*/
+  
     // -------------------------
     
   }
