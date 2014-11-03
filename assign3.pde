@@ -201,8 +201,8 @@ void mousePressed(){
        mouseY >= iy && mouseY <= iy+sideLength){
     
     // --------------- put you code here -------     
-  int col = (mouseX-ix) / 100;
-  int row = (mouseY-iy) / 100;
+  int col = int((mouseX-ix) / 100);
+  int row = int((mouseY-iy) / 100);
   
   if (slot[col][row] == SLOT_BOMB){
       gameState = GAME_LOSE;
