@@ -1,11 +1,14 @@
-int[][] slot;
+int[][] slot ;
 boolean[][] flagSlot; // use for flag
-int bombCount; // 共有幾顆炸彈
-int clickCount; // 共點了幾格
-int flagCount; // 共插了幾支旗
-int nSlot; // 分割 nSlot*nSlot格
-int totalSlots; // 總格數
-final int SLOT_SIZE = 100; //每格大小
+boolean turn = true;
+int bombCount; // how many bombs
+int clickCount; // how many click
+int flagCount; // how many flag
+int nSlot; // nSlot*nSlot
+int totalSlots; // total
+final int SLOT_SIZE = 100; //size
+
+
 
 int sideLength; // SLOT_SIZE * nSlot
 int ix; // (width - sideLength)/2
@@ -36,9 +39,9 @@ void setup(){
   cross=loadImage("data/cross.png");
   bg=loadImage("data/bg.png");
 
-  nSlot = 4;
+  nSlot = 4;//4*4 slots
   totalSlots = nSlot*nSlot;
-  // 初始化二維陣列
+ 
   slot = new int[nSlot][nSlot];
   
   sideLength = SLOT_SIZE * nSlot;
@@ -67,7 +70,9 @@ void draw(){
           break;
     case GAME_RUN:
           //---------------- put you code here ----
-
+          if(clickCount == (totalSlots-bombCount)){
+             gameState =  GAME_WIN;
+          }
           // -----------------------------------
           break;
     case GAME_WIN:
@@ -85,9 +90,19 @@ void draw(){
 
 int countNeighborBombs(int col,int row){
   // -------------- Requirement B ---------
-  return 0;
+  int count=0;  
+  for(int x=col-1;x<=col+1;x++){
+    for(int y = row-1;y<=row+1;y++){
+      if(x>=0&&y>=0&&x<=3&&y<=3){
+      if(slot[x][y]==SLOT_BOMB){
+          count++;
+      }
+      }
+    }
+  }
+  return count;
+  // -------------- Requirement B ---------
 }
-
 void setBombs(){
   // initial slot
   for (int col=0; col < nSlot; col++){
@@ -97,7 +112,19 @@ void setBombs(){
   }
   // -------------- put your code here ---------
   // randomly set bombs
+  
+for(int i=0 ;i<bombCount;i++){
+   int bombLocation = int(random(totalSlots));
+   int col = int(bombLocation / nSlot);
+   int row = int(bombLocation % nSlot);
 
+    if(slot[col][row] == SLOT_OFF){
+       slot[col][row] = SLOT_BOMB;
+    }
+    else{
+        i--;
+    }
+  }
   // ---------------------------------------
 }
 
@@ -174,7 +201,24 @@ void mousePressed(){
        mouseY >= iy && mouseY <= iy+sideLength){
     
     // --------------- put you code here -------     
+  int col = (mouseX-ix) / 100;
+  int row = (mouseY-iy) / 100;
+  
+  if (slot[col][row] == SLOT_BOMB){
+      gameState = GAME_LOSE;
+      showSlot(col,row, SLOT_DEAD);
+  }
+  if(slot[col][row] == SLOT_OFF){
+      showSlot(col,row, SLOT_SAFE);
+      clickCount++;    
+     // println(clickCount);
+  }
 
+  /*for(int Count=0;Count<=(totalSlots-bombCount);Count++){
+    if(Count == (totalSlots-bombCount) && 
+       clickCount == (totalSlots-bombCount))
+     {gameState =  GAME_WIN;}
+    }*/
     // -------------------------
     
   }
